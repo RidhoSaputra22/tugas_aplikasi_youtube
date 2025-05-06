@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tugas_aplikasi_youtube/layouts/mobile_layouts.dart';
-import 'package:tugas_aplikasi_youtube/layouts/web_layouts.dart';
+import 'package:tugas_aplikasi_youtube/layouts/desktop_layouts.dart';
 import 'package:tugas_aplikasi_youtube/widget/my_color.dart';
 
 void main() {
@@ -15,7 +15,15 @@ class MainApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-          iconTheme: const IconThemeData(color: Colors.white),
+          inputDecorationTheme: InputDecorationTheme(
+              hintStyle: const TextStyle(
+                color: MyColor.white,
+              ),
+              iconColor: MyColor.white,
+              suffixIconColor: MyColor.white,
+              suffixStyle: const TextStyle(
+                  color: MyColor.white, backgroundColor: MyColor.buttonGray)),
+          iconTheme: const IconThemeData(color: MyColor.white),
           fontFamily: "YouTube",
           bottomAppBarTheme: BottomAppBarTheme(
             color: MyColor.primaryColor,
@@ -27,7 +35,7 @@ class MainApp extends StatelessWidget {
           ),
           textTheme: const TextTheme(
             bodyMedium: TextStyle(
-              color: Colors.white,
+              color: MyColor.white,
             ),
           ),
           useMaterial3: false,
@@ -35,13 +43,13 @@ class MainApp extends StatelessWidget {
           appBarTheme: const AppBarTheme(
               backgroundColor: MyColor.primaryColor,
               titleTextStyle: TextStyle(
-                color: Colors.white,
+                color: MyColor.white,
               ))),
       home: LayoutBuilder(builder: (builder, constraints) {
         if (constraints.maxWidth < 600) {
           return const MobileLayouts();
         } else {
-          return const WebLayouts();
+          return const DesktopLayouts();
         }
       }),
     );

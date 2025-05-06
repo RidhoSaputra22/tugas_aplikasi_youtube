@@ -8,4 +8,5 @@ class MyColor {
   static const Color buttonGray = Color(0xff262626);
   static const Color textGray = Color(0xffcecece);
   static const Color black = Color(0xff000000);
+  static const Color transparent = Colors.transparent;
 }
