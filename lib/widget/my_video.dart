@@ -3,7 +3,12 @@ import 'package:tugas_aplikasi_youtube/pages/my_video_page.dart';
 import 'package:tugas_aplikasi_youtube/widget/my_color.dart';
 
 class MyVideo extends StatelessWidget {
-  MyVideo({super.key});
+  final double height;
+
+  MyVideo({
+    super.key,
+    this.height = 200,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +23,7 @@ class MyVideo extends StatelessWidget {
       child: Column(
         children: [
           Container(
-            height: 200,
+            height: height,
             width: double.infinity,
             decoration: BoxDecoration(
               image: DecorationImage(

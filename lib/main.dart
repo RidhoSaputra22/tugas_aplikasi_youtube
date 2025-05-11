@@ -15,6 +15,9 @@ class MainApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
+          drawerTheme: DrawerThemeData(
+              backgroundColor: MyColor.primaryColor,
+              shape: BeveledRectangleBorder()),
           inputDecorationTheme: InputDecorationTheme(
               hintStyle: const TextStyle(
                 color: MyColor.white,

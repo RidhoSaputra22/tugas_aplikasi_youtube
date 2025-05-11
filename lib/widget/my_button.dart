@@ -9,6 +9,8 @@ class MyButton extends StatelessWidget {
   final bool isActive;
   final EdgeInsetsGeometry padding;
   final BorderRadius borderRadius;
+  final double gap;
+  final double fontSize;
 
   MyButton({
     super.key,
@@ -16,6 +18,8 @@ class MyButton extends StatelessWidget {
     this.title,
     this.color,
     this.icon,
+    this.fontSize = 16,
+    this.gap = 0,
     this.isActive = false,
     this.padding = const EdgeInsets.symmetric(vertical: 7, horizontal: 15),
     this.borderRadius = const BorderRadius.all(Radius.circular(5)),
@@ -37,10 +41,12 @@ class MyButton extends StatelessWidget {
           child: Row(
             children: [
               icon != null ? Icon(icon) : Container(),
+              SizedBox(width: gap),
               title != null
                   ? Text(
                       title!,
                       style: TextStyle(
+                        fontSize: fontSize,
                         fontWeight: FontWeight.bold,
                         color: isActive ? Colors.black : Colors.white,
                       ),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tugas_aplikasi_youtube/widget/my_button.dart';
 import 'package:tugas_aplikasi_youtube/widget/my_color.dart';
+import 'package:tugas_aplikasi_youtube/widget/my_drawer.dart';
 import 'package:tugas_aplikasi_youtube/widget/my_video.dart';
 
 class DesktopLayouts extends StatelessWidget {
@@ -42,9 +43,13 @@ class DesktopLayouts extends StatelessWidget {
                 border: Border.all(color: MyColor.buttonGray),
               ),
               child: TextField(
+                // textAlignVertical: TextAlignVertical.center,
                 style: TextStyle(color: Colors.white),
                 cursorColor: Colors.white,
                 decoration: InputDecoration(
+                  hintText: "Telusuri",
+                  contentPadding: EdgeInsets.only(left: 20, right: 20, top: 10),
+                  border: InputBorder.none,
                   suffixIcon: Container(
                       height: 40,
                       width: 60,
@@ -102,61 +107,62 @@ class DesktopLayouts extends StatelessWidget {
         ),
       ),
       body: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          Expanded(child: MyDrawer()),
           Expanded(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                MyButton(
-                  color: MyColor.transparent,
-                  onTap: () {},
-                  icon: Icons.home,
-                  title: "Home",
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-                MyButton(
-                  color: MyColor.transparent,
-                  onTap: () {},
-                  icon: Icons.explore,
-                  title: "Explore",
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-                MyButton(
-                  color: MyColor.transparent,
-                  onTap: () {},
-                  icon: Icons.subscriptions,
-                  title: "Subscriptions",
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-                MyButton(
-                  color: MyColor.transparent,
-                  onTap: () {},
-                  icon: Icons.video_library,
-                  title: "Library",
-                ),
-              ],
-            ),
-          ),
-          Expanded(
-            flex: 3,
-            child: GridView.count(
-              crossAxisCount: 3,
-              crossAxisSpacing: 10,
-              mainAxisSpacing: 5,
-              children: [
-                MyVideo(),
-                MyVideo(),
-                MyVideo(),
-                MyVideo(),
-                MyVideo(),
-              ],
+            flex: 5,
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.all(10),
+              child: Column(
+                children: [
+                  Container(
+                    padding: EdgeInsets.symmetric(vertical: 20),
+                    child: Row(
+                      children: [
+                        Text(
+                          "Terbaru",
+                          style: TextStyle(
+                              fontSize: 20, fontWeight: FontWeight.bold),
+                        ),
+                        Spacer(),
+                        Text(
+                          "Kelola",
+                          style: TextStyle(
+                            // fontSize: 20,
+                            color: MyColor.blue,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        SizedBox(
+                          width: 20,
+                        ),
+                        Icon(Icons.grid_3x3),
+                      ],
+                    ),
+                  ),
+                  GridView.count(
+                    shrinkWrap: true,
+                    crossAxisCount: 3,
+                    crossAxisSpacing: 10,
+                    mainAxisSpacing: 0,
+                    childAspectRatio: 4 / 3,
+                    children: [
+                      MyVideo(),
+                      MyVideo(),
+                      MyVideo(),
+                      MyVideo(),
+                      MyVideo(),
+                      MyVideo(),
+                      MyVideo(),
+                      MyVideo(),
+                      MyVideo(),
+                      MyVideo(),
+                    ],
+                  ),
+                ],
+              ),
             ),
           ),
         ],
