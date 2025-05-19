@@ -9,5 +9,6 @@ class MyColor {
   static const Color textGray = Color(0xffcecece);
   static const Color black = Color(0xff000000);
   static const Color blue = Color(0xff1e90ff);
+  static const Color googleBlue = Color(0xffa7c7fa);
   static const Color transparent = Colors.transparent;
 }

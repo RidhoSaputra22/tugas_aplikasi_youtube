@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tugas_aplikasi_youtube/layouts/mobile_layouts.dart';
 import 'package:tugas_aplikasi_youtube/layouts/desktop_layouts.dart';
+import 'package:tugas_aplikasi_youtube/pages/mobile/my_login.dart';
 import 'package:tugas_aplikasi_youtube/widget/my_color.dart';
 
 void main() {
@@ -27,7 +28,7 @@ class MainApp extends StatelessWidget {
               suffixStyle: const TextStyle(
                   color: MyColor.white, backgroundColor: MyColor.buttonGray)),
           iconTheme: const IconThemeData(color: MyColor.white),
-          fontFamily: "YouTube",
+          fontFamily: "Roboto",
           bottomAppBarTheme: BottomAppBarTheme(
             color: MyColor.primaryColor,
           ),
@@ -50,9 +51,9 @@ class MainApp extends StatelessWidget {
               ))),
       home: LayoutBuilder(builder: (builder, constraints) {
         if (constraints.maxWidth < 600) {
-          return const MobileLayouts();
+          return MyLoginPage1();
         } else {
-          return const DesktopLayouts();
+          return DesktopLayouts();
         }
       }),
     );

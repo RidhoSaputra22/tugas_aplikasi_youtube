@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:tugas_aplikasi_youtube/widget/my_button.dart';
+import 'package:tugas_aplikasi_youtube/models/video.dart';
+import 'package:tugas_aplikasi_youtube/pages/desktop/my_desktop_video_page.dart';
+import 'package:tugas_aplikasi_youtube/widget/my_appbar.dart';
 import 'package:tugas_aplikasi_youtube/widget/my_color.dart';
 import 'package:tugas_aplikasi_youtube/widget/my_drawer.dart';
 import 'package:tugas_aplikasi_youtube/widget/my_video.dart';
@@ -10,102 +12,7 @@ class DesktopLayouts extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        leading: Icon(Icons.menu),
-        title: Row(
-          children: [
-            Container(
-              height: 35,
-              width: 35,
-              decoration: BoxDecoration(
-                  // color: MyColor.red,
-                  borderRadius: BorderRadius.circular(10),
-                  image: DecorationImage(
-                    image: AssetImage("assets/images/youtube.png"),
-                    fit: BoxFit.contain,
-                  )),
-            ),
-            SizedBox(
-              width: 5,
-            ),
-            Text(
-              "Premium",
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-            ),
-            Spacer(),
-            Container(
-              // color: MyColor.white,
-              height: 40,
-              width: 600,
-              decoration: BoxDecoration(
-                // color: MyColor.buttonGray,
-                borderRadius: BorderRadius.circular(20),
-                border: Border.all(color: MyColor.buttonGray),
-              ),
-              child: TextField(
-                // textAlignVertical: TextAlignVertical.center,
-                style: TextStyle(color: Colors.white),
-                cursorColor: Colors.white,
-                decoration: InputDecoration(
-                  hintText: "Telusuri",
-                  contentPadding: EdgeInsets.only(left: 20, right: 20, top: 10),
-                  border: InputBorder.none,
-                  suffixIcon: Container(
-                      height: 40,
-                      width: 60,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.only(
-                            topRight: Radius.circular(20),
-                            bottomRight: Radius.circular(20)),
-                        color: MyColor.buttonGray,
-                      ),
-                      child: Icon(
-                        Icons.search,
-                        color: MyColor.white,
-                      )),
-                ),
-              ),
-            ),
-            SizedBox(
-              width: 10,
-            ),
-            MyButton(
-              padding: EdgeInsets.all(10),
-              icon: Icons.mic,
-              borderRadius: BorderRadius.all(
-                Radius.circular(100),
-              ),
-              onTap: () {},
-            ),
-            Spacer(),
-            MyButton(
-              onTap: () {},
-              icon: Icons.add,
-              borderRadius: BorderRadius.all(
-                Radius.circular(20),
-              ),
-              title: "Buat",
-            ),
-            SizedBox(
-              width: 10,
-            ),
-            MyButton(
-              onTap: () {},
-              color: Colors.transparent,
-              icon: Icons.notifications_outlined,
-              borderRadius: BorderRadius.all(
-                Radius.circular(20),
-              ),
-            ),
-            SizedBox(
-              width: 5,
-            ),
-            CircleAvatar(
-              backgroundImage: AssetImage("assets/images/thumbnail.jpg"),
-            )
-          ],
-        ),
-      ),
+      appBar: MyAppBar(),
       body: Row(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -148,18 +55,18 @@ class DesktopLayouts extends StatelessWidget {
                     crossAxisSpacing: 10,
                     mainAxisSpacing: 0,
                     childAspectRatio: 4 / 3,
-                    children: [
-                      MyVideo(),
-                      MyVideo(),
-                      MyVideo(),
-                      MyVideo(),
-                      MyVideo(),
-                      MyVideo(),
-                      MyVideo(),
-                      MyVideo(),
-                      MyVideo(),
-                      MyVideo(),
-                    ],
+                    children: List.generate(6, (index) {
+                      final video = Video.generate()[index];
+                      return MyVideo(
+                          video: video,
+                          onTap: () => Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      MyDesktopVideoPage(video: video),
+                                ),
+                              ));
+                    }),
                   ),
                 ],
               ),

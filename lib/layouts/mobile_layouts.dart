@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:tugas_aplikasi_youtube/models/video.dart';
+import 'package:tugas_aplikasi_youtube/pages/mobile/my_mobile_video_page.dart';
 import 'package:tugas_aplikasi_youtube/widget/my_button.dart';
 import 'package:tugas_aplikasi_youtube/widget/my_color.dart';
 import 'package:tugas_aplikasi_youtube/widget/my_video.dart';
@@ -127,9 +129,19 @@ class MobileLayouts extends StatelessWidget {
           SliverList(
             delegate: SliverChildBuilderDelegate(
               (context, index) {
-                return MyVideo();
+                final video = Video.generate()[index];
+                return MyVideo(
+                  video: video,
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => MyMobileVideoPage(video: video),
+                      ),
+                    );
+                  },
+                );
               },
-              childCount: 20,
             ),
           )
         ],

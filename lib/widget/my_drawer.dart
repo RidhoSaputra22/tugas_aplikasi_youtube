@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:tugas_aplikasi_youtube/models/user.dart';
 import 'package:tugas_aplikasi_youtube/widget/my_button.dart';
 import 'package:tugas_aplikasi_youtube/widget/my_color.dart';
 
@@ -152,30 +153,33 @@ class MyDrawer extends StatelessWidget {
               Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: sideBarTitle3.map((e) {
-                  final index = sideBarTitle2.indexOf(e);
+                children: User.generate().map((e) {
                   return Container(
-                    padding: const EdgeInsets.only(bottom: 10),
+                    padding: const EdgeInsets.only(bottom: 10, left: 10),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         CircleAvatar(
-                          radius: 20,
-                          backgroundImage:
-                              AssetImage("assets/images/thumbnail.jpg"),
+                          radius: 18,
+                          backgroundImage: AssetImage(e.photo),
                         ),
                         SizedBox(
                           width: 10,
                         ),
-                        Text(
-                          e,
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 16,
+                        Expanded(
+                          child: Text(
+                            e.nama,
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16,
+                            ),
                           ),
                         ),
-                        Spacer(),
+                        SizedBox(
+                          width: 10,
+                        ),
                         Icon(Icons.stream_outlined),
                       ],
                     ),

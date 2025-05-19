@@ -1,10 +1,12 @@
 import "package:flutter/material.dart";
+import "package:tugas_aplikasi_youtube/models/video.dart";
 import "package:tugas_aplikasi_youtube/widget/my_button.dart";
 import "package:tugas_aplikasi_youtube/widget/my_color.dart";
 import "package:tugas_aplikasi_youtube/widget/my_video.dart";
 
-class MyVideoPage extends StatelessWidget {
-  const MyVideoPage({super.key});
+class MyMobileVideoPage extends StatelessWidget {
+  final Video video;
+  const MyMobileVideoPage({super.key, required this.video});
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +20,7 @@ class MyVideoPage extends StatelessWidget {
             height: 250,
             decoration: BoxDecoration(
               image: DecorationImage(
-                image: AssetImage("assets/images/thumbnail.jpg"),
+                image: AssetImage("${video.thumbnailUrl}"),
                 fit: BoxFit.cover,
               ),
             ),
@@ -29,7 +31,7 @@ class MyVideoPage extends StatelessWidget {
               top: 15,
             ),
             child: Text(
-              "EPIC COMEBACK - Desi Aristia vs Emilia Catanese (Official Music Video)",
+              "${video.title}",
               style: TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
@@ -43,27 +45,11 @@ class MyVideoPage extends StatelessWidget {
             padding: const EdgeInsets.only(left: 15),
             child: RichText(
               text: TextSpan(
-                text: "Desi Aristia ",
+                text: "${video.user.nama} ",
                 style: TextStyle(
                   color: MyColor.textGray,
                   fontSize: 15,
                 ),
-                children: <TextSpan>[
-                  TextSpan(
-                    text: "vs ",
-                    style: TextStyle(
-                      color: MyColor.textGray,
-                      fontSize: 15,
-                    ),
-                  ),
-                  TextSpan(
-                    text: "Emilia Catanese",
-                    style: TextStyle(
-                      color: MyColor.textGray,
-                      fontSize: 15,
-                    ),
-                  ),
-                ],
               ),
             ),
           ),
@@ -76,19 +62,19 @@ class MyVideoPage extends StatelessWidget {
               children: [
                 CircleAvatar(
                   radius: 20,
-                  backgroundImage: AssetImage("assets/images/thumbnail.jpg"),
+                  backgroundImage: AssetImage("${video.user.photo}"),
                 ),
                 SizedBox(
                   width: 10,
                 ),
                 Text(
-                  "Desi Aristia",
+                  "${video.user.nama}",
                 ),
                 SizedBox(
                   width: 10,
                 ),
                 Text(
-                  "4,25jt",
+                  "${video.likes}",
                   style: TextStyle(
                     color: MyColor.textGray,
                   ),
@@ -224,8 +210,7 @@ class MyVideoPage extends StatelessWidget {
                       children: [
                         CircleAvatar(
                           radius: 20,
-                          backgroundImage:
-                              AssetImage("assets/images/thumbnail.jpg"),
+                          backgroundImage: AssetImage("${video.user.photo}"),
                         ),
                         SizedBox(
                           width: 10,
@@ -255,10 +240,20 @@ class MyVideoPage extends StatelessWidget {
           SizedBox(
             height: 20,
           ),
-          MyVideo(),
-          MyVideo(),
-          MyVideo(),
-          MyVideo(),
+          ...(Video.generate()..shuffle()).map(
+            (e) => MyVideo(
+              video: e,
+              onTap: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => MyMobileVideoPage(
+                      video: e,
+                    ),
+                  ),
+                );
+              },
+            ),
+          )
         ],
       ),
     ));
