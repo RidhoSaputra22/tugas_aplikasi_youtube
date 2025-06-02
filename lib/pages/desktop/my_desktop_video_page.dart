@@ -42,7 +42,7 @@ class MyDesktopVideoPage extends StatelessWidget {
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(10),
                           image: DecorationImage(
-                            image: AssetImage(video.thumbnailUrl),
+                            image: NetworkImage(video.thumbnailUrl),
                             fit: BoxFit.cover,
                           ),
                         ),
@@ -72,7 +72,7 @@ class MyDesktopVideoPage extends StatelessWidget {
                           children: [
                             CircleAvatar(
                               radius: 20,
-                              backgroundImage: AssetImage(video.user.photo),
+                              backgroundImage: NetworkImage(video.user.photo),
                             ),
                             SizedBox(
                               width: 10,
@@ -246,7 +246,7 @@ class MyDesktopVideoPage extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             CircleAvatar(
-                              backgroundImage: AssetImage(
+                              backgroundImage: NetworkImage(
                                 video.user.photo,
                               ),
                             ),

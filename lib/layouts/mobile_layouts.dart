@@ -23,7 +23,7 @@ class MobileLayouts extends StatelessWidget {
                   width: 40,
                   decoration: BoxDecoration(
                     image: DecorationImage(
-                      image: AssetImage("assets/images/youtube.png"),
+                      image: AssetImage("images/youtube.png"),
                       fit: BoxFit.contain,
                     ),
                   ),
@@ -128,6 +128,7 @@ class MobileLayouts extends StatelessWidget {
           ),
           SliverList(
             delegate: SliverChildBuilderDelegate(
+              childCount: Video.generate().length,
               (context, index) {
                 final video = Video.generate()[index];
                 return MyVideo(
@@ -190,7 +191,7 @@ class MobileLayouts extends StatelessWidget {
           BottomNavigationBarItem(
             icon: CircleAvatar(
               radius: 15,
-              backgroundImage: AssetImage("assets/images/thumbnail.jpg"),
+              backgroundImage: AssetImage("images/thumbnail.jpg"),
             ),
             label: "You",
           ),

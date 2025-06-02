@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:tugas_aplikasi_youtube/models/user.dart';
 import 'package:tugas_aplikasi_youtube/widget/my_button.dart';
 import 'package:tugas_aplikasi_youtube/widget/my_color.dart';
@@ -162,7 +161,7 @@ class MyDrawer extends StatelessWidget {
                       children: [
                         CircleAvatar(
                           radius: 18,
-                          backgroundImage: AssetImage(e.photo),
+                          backgroundImage: NetworkImage(e.photo),
                         ),
                         SizedBox(
                           width: 10,

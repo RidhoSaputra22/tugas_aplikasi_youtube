@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:tugas_aplikasi_youtube/layouts/mobile_layouts.dart';
 import 'package:tugas_aplikasi_youtube/layouts/desktop_layouts.dart';
-import 'package:tugas_aplikasi_youtube/pages/mobile/my_login.dart';
+import 'package:tugas_aplikasi_youtube/models/auth.dart';
+import 'package:tugas_aplikasi_youtube/pages/login.dart';
 import 'package:tugas_aplikasi_youtube/widget/my_color.dart';
 
 void main() {
@@ -49,13 +50,26 @@ class MainApp extends StatelessWidget {
               titleTextStyle: TextStyle(
                 color: MyColor.white,
               ))),
-      home: LayoutBuilder(builder: (builder, constraints) {
-        if (constraints.maxWidth < 600) {
-          return MyLoginPage1();
-        } else {
-          return DesktopLayouts();
-        }
-      }),
+      home: MyHomePage(),
     );
+  }
+}
+
+class MyHomePage extends StatelessWidget {
+  final bool isLogin;
+  const MyHomePage({super.key, this.isLogin = false});
+
+  @override
+  Widget build(BuildContext context) {
+    return isLogin
+        ? LayoutBuilder(
+            builder: (BuildContext context, BoxConstraints constraints) {
+            if (constraints.maxWidth < 600) {
+              return MobileLayouts();
+            } else {
+              return DesktopLayouts();
+            }
+          })
+        : const LoginPage();
   }
 }

@@ -58,7 +58,7 @@ class Video {
         Video(
           id: "1",
           title: "Wild breakthrough on Math after 56 years... [Exclusive]",
-          thumbnailUrl: "images/video/1.png",
+          thumbnailUrl: "http://localhost:3000/video/1.png",
           datePosted: "15 Mei 2025",
           views: "46K",
           likes: "1,7 rb", // Data jumlah likes tidak tersedia
@@ -70,7 +70,7 @@ class Video {
         Video(
           id: "2",
           title: "lain sings u duvet",
-          thumbnailUrl: "images/video/2.png",
+          thumbnailUrl: "http://localhost:3000/video/2.png",
           datePosted: "15 Mei 2023",
           views: "1.1M",
           likes: "", // Data jumlah likes tidak tersedia
@@ -82,7 +82,7 @@ class Video {
         Video(
           id: "3",
           title: "New maths discoveries! All announced at once!",
-          thumbnailUrl: "images/video/3.png",
+          thumbnailUrl: "http://localhost:3000/video/3.png",
           datePosted: "15 Mei 2025",
           views: "87K",
           likes: "1,5 jt", // Data jumlah likes tidak tersedia
@@ -94,7 +94,7 @@ class Video {
         Video(
           id: "4",
           title: "Google's New \"AlphaEvolve\" SHOCKING Ability...",
-          thumbnailUrl: "images/video/4.png",
+          thumbnailUrl: "http://localhost:3000/video/4.png",
           datePosted: "15 Mei 2025",
           views: "50K",
           likes: "2,34 rb", // Data jumlah likes tidak tersedia
@@ -106,7 +106,7 @@ class Video {
         Video(
           id: "5",
           title: "Lain sings u duvet - Juliana Chahayed's Cover of Bôa - Duvet",
-          thumbnailUrl: "images/video/5.png",
+          thumbnailUrl: "http://localhost:3000/video/5.png",
           datePosted: "15 Mei 2023",
           views: "1.6M",
           likes: "", // Data jumlah likes tidak tersedia
@@ -118,7 +118,7 @@ class Video {
         Video(
           id: "6",
           title: "New \"Absolute Zero\" Model Learns with NO DATA",
-          thumbnailUrl: "images/video/6.png",
+          thumbnailUrl: "http://localhost:3000/video/6.png",
           datePosted: "9 Mei 2025",
           views: "60K",
           likes: "", // Data jumlah likes tidak tersedia

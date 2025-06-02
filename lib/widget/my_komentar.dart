@@ -19,7 +19,7 @@ class MyKomentar extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           CircleAvatar(
-            backgroundImage: AssetImage(
+            backgroundImage: NetworkImage(
               komentar.user.photo,
             ),
           ),

@@ -30,7 +30,7 @@ class MyVideo extends StatelessWidget {
                   width: double.infinity,
                   decoration: BoxDecoration(
                     image: DecorationImage(
-                      image: AssetImage("${video.thumbnailUrl}"),
+                      image: NetworkImage("${video.thumbnailUrl}"),
                       fit: BoxFit.cover,
                     ),
                   ),
@@ -45,7 +45,7 @@ class MyVideo extends StatelessWidget {
                     children: [
                       CircleAvatar(
                         radius: 20,
-                        backgroundImage: AssetImage("${video.user.photo}"),
+                        backgroundImage: NetworkImage("${video.user.photo}"),
                       ),
                       SizedBox(
                         width: 10,
@@ -139,7 +139,7 @@ class MyMobileVideo extends StatelessWidget {
                   Radius.circular(5.0),
                 ),
                 image: DecorationImage(
-                  image: AssetImage(video.thumbnailUrl),
+                  image: NetworkImage(video.thumbnailUrl),
                   fit: BoxFit.cover,
                 ),
               ),
