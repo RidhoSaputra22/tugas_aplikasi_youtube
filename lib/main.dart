@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tugas_aplikasi_youtube/layouts/mobile_layouts.dart';
 import 'package:tugas_aplikasi_youtube/layouts/desktop_layouts.dart';
-import 'package:tugas_aplikasi_youtube/models/auth.dart';
 import 'package:tugas_aplikasi_youtube/pages/login.dart';
 import 'package:tugas_aplikasi_youtube/widget/my_color.dart';
 
@@ -57,7 +56,7 @@ class MainApp extends StatelessWidget {
 
 class MyHomePage extends StatelessWidget {
   final bool isLogin;
-  const MyHomePage({super.key, this.isLogin = false});
+  const MyHomePage({super.key, this.isLogin = true});
 
   @override
   Widget build(BuildContext context) {

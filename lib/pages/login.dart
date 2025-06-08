@@ -16,7 +16,7 @@ class _LoginPageState extends State<LoginPage> {
   User user = User(
     email: "",
     password: "",
-    uid: "",
+    id: "",
     photo: "",
     tanggal_lahir: "",
     gender: "",

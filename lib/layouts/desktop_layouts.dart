@@ -49,25 +49,60 @@ class DesktopLayouts extends StatelessWidget {
                       ],
                     ),
                   ),
-                  GridView.count(
-                    shrinkWrap: true,
-                    crossAxisCount: 3,
-                    crossAxisSpacing: 10,
-                    mainAxisSpacing: 0,
-                    childAspectRatio: 4 / 3,
-                    children: List.generate(6, (index) {
-                      final video = Video.generate()[index];
-                      return MyVideo(
-                          video: video,
-                          onTap: () => Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) =>
-                                      MyDesktopVideoPage(video: video),
-                                ),
-                              ));
-                    }),
-                  ),
+                  FutureBuilder(
+                      future: Video.fetchVideos(),
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return Center(child: CircularProgressIndicator());
+                        }
+
+                        if (snapshot.hasError) {
+                          return Center(
+                              child: Text('Error: ${snapshot.error}'));
+                        }
+
+                        List<Video> videos = snapshot.data!;
+
+                        return GridView.count(
+                          shrinkWrap: true,
+                          crossAxisCount: 3,
+                          crossAxisSpacing: 10,
+                          mainAxisSpacing: 0,
+                          childAspectRatio: 4 / 3,
+                          children: List.generate(videos.length, (index) {
+                            final video = videos[index];
+                            return MyVideo(
+                                video: video,
+                                onTap: () => Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            MyDesktopVideoPage(video: video),
+                                      ),
+                                    ));
+                          }),
+                        );
+                      }),
+                  // GridView.count(
+                  //   shrinkWrap: true,
+                  //   crossAxisCount: 3,
+                  //   crossAxisSpacing: 10,
+                  //   mainAxisSpacing: 0,
+                  //   childAspectRatio: 4 / 3,
+                  //   children: List.generate(6, (index) {
+                  //     final video = Video.generate()[index];
+                  //     return MyVideo(
+                  //         video: video,
+                  //         onTap: () => Navigator.push(
+                  //               context,
+                  //               MaterialPageRoute(
+                  //                 builder: (context) =>
+                  //                     MyDesktopVideoPage(video: video),
+                  //               ),
+                  //             ));
+                  //   }),
+                  // ),
                 ],
               ),
             ),

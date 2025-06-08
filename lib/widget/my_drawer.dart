@@ -149,42 +149,42 @@ class MyDrawer extends StatelessWidget {
                   ),
                 ),
               ),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: User.generate().map((e) {
-                  return Container(
-                    padding: const EdgeInsets.only(bottom: 10, left: 10),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        CircleAvatar(
-                          radius: 18,
-                          backgroundImage: NetworkImage(e.photo),
-                        ),
-                        SizedBox(
-                          width: 10,
-                        ),
-                        Expanded(
-                          child: Text(
-                            e.nama,
-                            overflow: TextOverflow.ellipsis,
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 16,
-                            ),
-                          ),
-                        ),
-                        SizedBox(
-                          width: 10,
-                        ),
-                        Icon(Icons.stream_outlined),
-                      ],
-                    ),
-                  );
-                }).toList(),
-              ),
+              // Column(
+              //   mainAxisAlignment: MainAxisAlignment.start,
+              //   crossAxisAlignment: CrossAxisAlignment.start,
+              //   children: User.generate().map((e) {
+              //     return Container(
+              //       padding: const EdgeInsets.only(bottom: 10, left: 10),
+              //       child: Row(
+              //         mainAxisAlignment: MainAxisAlignment.start,
+              //         crossAxisAlignment: CrossAxisAlignment.center,
+              //         children: [
+              //           CircleAvatar(
+              //             radius: 18,
+              //             backgroundImage: NetworkImage(e.photo),
+              //           ),
+              //           SizedBox(
+              //             width: 10,
+              //           ),
+              //           Expanded(
+              //             child: Text(
+              //               e.nama,
+              //               overflow: TextOverflow.ellipsis,
+              //               style: TextStyle(
+              //                 fontWeight: FontWeight.bold,
+              //                 fontSize: 16,
+              //               ),
+              //             ),
+              //           ),
+              //           SizedBox(
+              //             width: 10,
+              //           ),
+              //           Icon(Icons.stream_outlined),
+              //         ],
+              //       ),
+              //     );
+              //   }).toList(),
+              // ),
             ],
           ),
         ),

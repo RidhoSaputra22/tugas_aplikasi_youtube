@@ -1,22 +1,41 @@
 import "package:flutter/material.dart";
-import "package:font_awesome_flutter/font_awesome_flutter.dart";
-import "package:tugas_aplikasi_youtube/models/komentar.dart";
 import "package:tugas_aplikasi_youtube/models/video.dart";
 import "package:tugas_aplikasi_youtube/widget/my_appbar.dart";
 import "package:tugas_aplikasi_youtube/widget/my_button.dart";
 import "package:tugas_aplikasi_youtube/widget/my_color.dart";
 import "package:tugas_aplikasi_youtube/widget/my_drawer.dart";
 import "package:tugas_aplikasi_youtube/widget/my_komentar.dart";
-import "package:tugas_aplikasi_youtube/widget/my_mobile_video.dart";
 import "package:tugas_aplikasi_youtube/widget/my_video.dart";
 
-class MyDesktopVideoPage extends StatelessWidget {
+import 'package:video_player/video_player.dart';
+
+class MyDesktopVideoPage extends StatefulWidget {
   final Video video;
 
   const MyDesktopVideoPage({
     super.key,
     required this.video,
   });
+
+  @override
+  State<MyDesktopVideoPage> createState() => _MyDesktopVideoPageState();
+}
+
+class _MyDesktopVideoPageState extends State<MyDesktopVideoPage> {
+  late VideoPlayerController videoPlayerController;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    videoPlayerController =
+        VideoPlayerController.networkUrl(Uri.parse(widget.video.videoUrl))
+          ..initialize().then((_) {
+            // Ensure the first frame is shown after the video is initialized, even before the play button has been pressed.\
+            videoPlayerController.play();
+            setState(() {});
+          });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -37,23 +56,23 @@ class MyDesktopVideoPage extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Container(
-                        height: 450,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          image: DecorationImage(
-                            image: NetworkImage(video.thumbnailUrl),
-                            fit: BoxFit.cover,
-                          ),
-                        ),
-                      ),
+                      videoPlayerController.value.isInitialized
+                          ? AspectRatio(
+                              aspectRatio:
+                                  videoPlayerController.value.aspectRatio,
+                              child: VideoPlayer(videoPlayerController),
+                            )
+                          : Container(
+                              height: 450,
+                              child: Center(child: CircularProgressIndicator()),
+                            ),
                       Container(
                         padding: const EdgeInsets.only(
                           left: 15,
                           top: 15,
                         ),
                         child: Text(
-                          video.title,
+                          widget.video.title,
                           style: TextStyle(
                             fontSize: 20,
                             fontWeight: FontWeight.bold,
@@ -72,7 +91,8 @@ class MyDesktopVideoPage extends StatelessWidget {
                           children: [
                             CircleAvatar(
                               radius: 20,
-                              backgroundImage: NetworkImage(video.user.photo),
+                              backgroundImage:
+                                  NetworkImage(widget.video.user.photo),
                             ),
                             SizedBox(
                               width: 10,
@@ -82,13 +102,13 @@ class MyDesktopVideoPage extends StatelessWidget {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  video.user.nama,
+                                  widget.video.user.nama,
                                 ),
                                 SizedBox(
                                   width: 10,
                                 ),
                                 Text(
-                                  video.views,
+                                  widget.video.views,
                                   style: TextStyle(
                                     color: MyColor.textGray,
                                   ),
@@ -168,10 +188,7 @@ class MyDesktopVideoPage extends StatelessWidget {
                               borderRadius: BorderRadius.all(
                                 Radius.circular(20.0),
                               ),
-                              icon: FaIcon(
-                                FontAwesomeIcons.share,
-                                size: 5,
-                              ).icon,
+                              icon: Icons.share,
                             ),
                             SizedBox(
                               width: 10,
@@ -203,7 +220,7 @@ class MyDesktopVideoPage extends StatelessWidget {
                               RichText(
                                 text: TextSpan(
                                   text:
-                                      "${video.views} x ditonton ${video.datePosted}\n\n ${video.description}",
+                                      "${widget.video.views} x ditonton ${widget.video.datePosted}\n\n ${widget.video.description}",
                                   style: TextStyle(
                                     color: MyColor.textColor,
                                   ),
@@ -247,7 +264,7 @@ class MyDesktopVideoPage extends StatelessWidget {
                           children: [
                             CircleAvatar(
                               backgroundImage: NetworkImage(
-                                video.user.photo,
+                                widget.video.user.photo,
                               ),
                             ),
                             SizedBox(
@@ -270,7 +287,7 @@ class MyDesktopVideoPage extends StatelessWidget {
                       SizedBox(
                         height: 30,
                       ),
-                      ...(video.komentar..shuffle()).map(
+                      ...(widget.video.komentar..shuffle()).map(
                         (e) => Padding(
                           padding: EdgeInsets.symmetric(vertical: 10),
                           child: MyKomentar(
@@ -324,21 +341,43 @@ class MyDesktopVideoPage extends StatelessWidget {
                         SizedBox(
                           height: 30,
                         ),
-                        ...(Video.generate()..shuffle()).map((e) => Padding(
-                              padding: const EdgeInsets.only(bottom: 10.0),
-                              child: MyVideo(
-                                isMobile: true,
-                                video: e,
-                                onTap: () {
-                                  Navigator.of(context).push(
-                                    MaterialPageRoute(
-                                      builder: (context) =>
-                                          MyDesktopVideoPage(video: e),
-                                    ),
+                        FutureBuilder(
+                            future: Video.fetchVideos(),
+                            builder: (context, snapshot) {
+                              if (snapshot.connectionState ==
+                                  ConnectionState.waiting) {
+                                return Center(
+                                    child: CircularProgressIndicator());
+                              }
+
+                              if (snapshot.hasError) {
+                                return Center(
+                                    child: Text('Error: ${snapshot.error}'));
+                              }
+
+                              List<Video> videos = snapshot.data!;
+
+                              return ListView.builder(
+                                shrinkWrap: true,
+                                physics: NeverScrollableScrollPhysics(),
+                                itemCount: videos.length,
+                                itemBuilder: (context, index) {
+                                  return MyVideo(
+                                    isMobile: true,
+                                    video: videos[index],
+                                    onTap: () {
+                                      Navigator.of(context).push(
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              MyDesktopVideoPage(
+                                                  video: videos[index]),
+                                        ),
+                                      );
+                                    },
                                   );
                                 },
-                              ),
-                            )),
+                              );
+                            }),
                         SizedBox(
                           height: 20,
                         ),

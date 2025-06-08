@@ -3,10 +3,31 @@ import "package:tugas_aplikasi_youtube/models/video.dart";
 import "package:tugas_aplikasi_youtube/widget/my_button.dart";
 import "package:tugas_aplikasi_youtube/widget/my_color.dart";
 import "package:tugas_aplikasi_youtube/widget/my_video.dart";
+import 'package:video_player/video_player.dart';
 
-class MyMobileVideoPage extends StatelessWidget {
+class MyMobileVideoPage extends StatefulWidget {
   final Video video;
   const MyMobileVideoPage({super.key, required this.video});
+
+  @override
+  State<MyMobileVideoPage> createState() => _MyMobileVideoPageState();
+}
+
+class _MyMobileVideoPageState extends State<MyMobileVideoPage> {
+  late VideoPlayerController videoPlayerController;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    videoPlayerController =
+        VideoPlayerController.networkUrl(Uri.parse(widget.video.videoUrl))
+          ..initialize().then((_) {
+            // Ensure the first frame is shown after the video is initialized, even before the play button has been pressed.\
+            videoPlayerController.play();
+            setState(() {});
+          });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -16,22 +37,22 @@ class MyMobileVideoPage extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Container(
-            height: 250,
-            decoration: BoxDecoration(
-              image: DecorationImage(
-                image: AssetImage("${video.thumbnailUrl}"),
-                fit: BoxFit.cover,
-              ),
-            ),
-          ),
+          videoPlayerController.value.isInitialized
+              ? AspectRatio(
+                  aspectRatio: videoPlayerController.value.aspectRatio,
+                  child: VideoPlayer(videoPlayerController),
+                )
+              : Container(
+                  height: 200,
+                  child: Center(child: CircularProgressIndicator()),
+                ),
           Container(
             padding: const EdgeInsets.only(
               left: 15,
               top: 15,
             ),
             child: Text(
-              "${video.title}",
+              "${widget.video.title}",
               style: TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
@@ -45,7 +66,7 @@ class MyMobileVideoPage extends StatelessWidget {
             padding: const EdgeInsets.only(left: 15),
             child: RichText(
               text: TextSpan(
-                text: "${video.user.nama} ",
+                text: "${widget.video.user.nama} ",
                 style: TextStyle(
                   color: MyColor.textGray,
                   fontSize: 15,
@@ -62,19 +83,19 @@ class MyMobileVideoPage extends StatelessWidget {
               children: [
                 CircleAvatar(
                   radius: 20,
-                  backgroundImage: AssetImage("${video.user.photo}"),
+                  backgroundImage: NetworkImage("${widget.video.user.photo}"),
                 ),
                 SizedBox(
                   width: 10,
                 ),
                 Text(
-                  "${video.user.nama}",
+                  "${widget.video.user.nama}",
                 ),
                 SizedBox(
                   width: 10,
                 ),
                 Text(
-                  "${video.likes}",
+                  "${widget.video.likes}",
                   style: TextStyle(
                     color: MyColor.textGray,
                   ),
@@ -210,7 +231,8 @@ class MyMobileVideoPage extends StatelessWidget {
                       children: [
                         CircleAvatar(
                           radius: 20,
-                          backgroundImage: AssetImage("${video.user.photo}"),
+                          backgroundImage:
+                              NetworkImage("${widget.video.user.photo}"),
                         ),
                         SizedBox(
                           width: 10,
@@ -240,19 +262,39 @@ class MyMobileVideoPage extends StatelessWidget {
           SizedBox(
             height: 20,
           ),
-          ...(Video.generate()..shuffle()).map(
-            (e) => MyVideo(
-              video: e,
-              onTap: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (context) => MyMobileVideoPage(
-                      video: e,
-                    ),
-                  ),
-                );
-              },
-            ),
+          FutureBuilder<List<Video>>(
+            future: Video.fetchVideos(),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return Center(child: CircularProgressIndicator());
+              }
+
+              if (snapshot.hasError) {
+                return Center(child: Text('Error: ${snapshot.error}'));
+              }
+
+              List<Video> videos = snapshot.data!;
+
+              return ListView.builder(
+                shrinkWrap: true,
+                physics: NeverScrollableScrollPhysics(),
+                itemCount: videos.length,
+                itemBuilder: (context, index) {
+                  return MyVideo(
+                    video: videos[index],
+                    onTap: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => MyMobileVideoPage(
+                            video: videos[index],
+                          ),
+                        ),
+                      );
+                    },
+                  );
+                },
+              );
+            },
           )
         ],
       ),

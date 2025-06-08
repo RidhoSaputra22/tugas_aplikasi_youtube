@@ -1,10 +1,18 @@
+import 'dart:convert';
+
+import 'package:file_picker/file_picker.dart';
+import 'package:tugas_aplikasi_youtube/config.dart';
 import 'package:tugas_aplikasi_youtube/models/komentar.dart';
 import 'package:tugas_aplikasi_youtube/models/user.dart';
+import 'package:http/http.dart' as http;
+import 'dart:typed_data';
+import 'package:dio/dio.dart';
 
 class Video {
   final String id;
   final String title;
   final String thumbnailUrl;
+  final String videoUrl;
   final String datePosted;
   final String views;
   final String likes;
@@ -16,6 +24,7 @@ class Video {
     required this.id,
     required this.title,
     required this.thumbnailUrl,
+    required this.videoUrl,
     required this.datePosted,
     required this.views,
     required this.likes,
@@ -26,9 +35,10 @@ class Video {
 
   factory Video.fromJson(Map<String, dynamic> json) {
     return Video(
-      id: json['id'],
+      id: json['id'].toString(),
       title: json['title'],
       thumbnailUrl: json['thumbnailUrl'],
+      videoUrl: json['videoUrl'],
       datePosted: json['datePosted'],
       views: json['views'],
       likes: json['likes'],
@@ -45,6 +55,7 @@ class Video {
       'id': id,
       'title': title,
       'thumbnailUrl': thumbnailUrl,
+      'videoUrl': videoUrl,
       'datePosted': datePosted,
       'views': views,
       'likes': likes,
@@ -54,78 +65,59 @@ class Video {
     };
   }
 
-  static List<Video> generate() => [
-        Video(
-          id: "1",
-          title: "Wild breakthrough on Math after 56 years... [Exclusive]",
-          thumbnailUrl: "http://localhost:3000/video/1.png",
-          datePosted: "15 Mei 2025",
-          views: "46K",
-          likes: "1,7 rb", // Data jumlah likes tidak tersedia
-          description:
-              "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor ", // Data jumlah likes tidak tersedia
-          user: User.generate()[0],
-          komentar: Komentar.generate(),
+  static Future<void> uploadVideoWeb({
+    required FilePickerResult video,
+    required FilePickerResult thumbnail,
+    required String title,
+    required String desc,
+  }) async {
+    print(thumbnail.files.single.name);
+    print(video.files.single.name);
+    print(Config.apiBaseUrl);
+    try {
+      var formData = FormData.fromMap({
+        'file': MultipartFile.fromBytes(video.files.first.bytes!,
+            filename: video.files.single.name),
+        'thumbnail': MultipartFile.fromBytes(thumbnail.files.first.bytes!,
+            filename: thumbnail.files.single.name),
+        'title': title,
+        'user_id': '1',
+        'description': desc,
+      });
+
+      Dio dio = Dio();
+
+      var response = await dio.post(
+        '${Config.apiBaseUrl}/video',
+        data: formData,
+        options: Options(
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
         ),
-        Video(
-          id: "2",
-          title: "lain sings u duvet",
-          thumbnailUrl: "http://localhost:3000/video/2.png",
-          datePosted: "15 Mei 2023",
-          views: "1.1M",
-          likes: "", // Data jumlah likes tidak tersedia
-          description:
-              "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor ", // Data jumlah likes tidak tersedia
-          user: User.generate()[1],
-          komentar: Komentar.generate(),
-        ),
-        Video(
-          id: "3",
-          title: "New maths discoveries! All announced at once!",
-          thumbnailUrl: "http://localhost:3000/video/3.png",
-          datePosted: "15 Mei 2025",
-          views: "87K",
-          likes: "1,5 jt", // Data jumlah likes tidak tersedia
-          description:
-              "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor ", // Data jumlah likes tidak tersedia
-          user: User.generate()[2],
-          komentar: Komentar.generate(),
-        ),
-        Video(
-          id: "4",
-          title: "Google's New \"AlphaEvolve\" SHOCKING Ability...",
-          thumbnailUrl: "http://localhost:3000/video/4.png",
-          datePosted: "15 Mei 2025",
-          views: "50K",
-          likes: "2,34 rb", // Data jumlah likes tidak tersedia
-          description:
-              "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor ", // Data jumlah likes tidak tersedia
-          user: User.generate()[3],
-          komentar: Komentar.generate(),
-        ),
-        Video(
-          id: "5",
-          title: "Lain sings u duvet - Juliana Chahayed's Cover of Bôa - Duvet",
-          thumbnailUrl: "http://localhost:3000/video/5.png",
-          datePosted: "15 Mei 2023",
-          views: "1.6M",
-          likes: "", // Data jumlah likes tidak tersedia
-          description:
-              "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor ", // Data jumlah likes tidak tersedia
-          user: User.generate()[4],
-          komentar: Komentar.generate(),
-        ),
-        Video(
-          id: "6",
-          title: "New \"Absolute Zero\" Model Learns with NO DATA",
-          thumbnailUrl: "http://localhost:3000/video/6.png",
-          datePosted: "9 Mei 2025",
-          views: "60K",
-          likes: "", // Data jumlah likes tidak tersedia
-          description:
-              "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor ", // Data jumlah likes tidak tersedia
-          user: User.generate()[5],
-          komentar: Komentar.generate(),
-        ),
-      ];
+      );
+
+      print('Upload berhasil: ${response.data}');
+    } catch (e) {
+      print('Upload gagal: $e');
+    }
+  }
+
+  static Future<List<Video>> fetchVideos() async {
+    try {
+      final response = await http.get(
+        Uri.parse('${Config.apiBaseUrl}/video'),
+      );
+
+      if (response.statusCode == 200) {
+        final List<dynamic> data = json.decode(response.body);
+        return data.map((e) => Video.fromJson(e)).toList();
+      } else {
+        throw Exception(
+            'Failed to fetch videos. Status code: ${response.statusCode}');
+      }
+    } catch (e) {
+      throw Exception('Error fetching videos: $e');
+    }
+  }
 }
